@@ -38,187 +38,10 @@ http://localhost:8000/
     <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-    <script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 
-    </script>
-
-    <style type="text/css">
-
-        /* paste CSS below this line */
-        #map {
-              width:100%;
-              height:100%;
-        }
-
-        h1, h3{
-            font-family: "Arial", "Verdana"
-        }
-
-        /* .markerdiv {
-            background-color: rgba(237, 248, 177, 0.6);
-        }
-
-        .marker-cluster-small div {
-            background-color: rgba(237, 248, 177, 0.6);
-        }
-
-        .marker-cluster-medium {
-            background-color: rgba(127, 205, 187, 0.6);
-        }
-
-        .marker-cluster-medium div {
-            background-color: rgba(127, 205, 187, 0.6);
-        } */
-
-        .marker-cluster-large {
-            background-color: rgba(44, 127, 184, 0.6);
-        }
-
-        .marker-cluster-large div {
-            background-color: rgba(44, 127, 184, 0.6);
-        }
-
-
-
-        .marker-cluster-large_nav {
-            background-color: rgba(254, 143, 27, 0.6);
-        }
-
-        .marker-cluster-large_nav div {
-            background-color: rgba(254, 143, 27, 0.6);
-        }
-
-
-
-        .sliderDiv{
-            display:inline-block;
-            width: 66%;
-            height: 8%;
-            margin-bottom: 5px;
-            padding-left: 3%;
-            /* margin-top: 25px; */
-        }
-
-        .sliderDiv.narrow{
-            width: 30%;
-            padding-left: 0;
-        }
-
-        #slider-opaque, #slider-range{
-            width: 90%;
-        }
-
-        .sliderValue{
-            border:0;
-            color:#4E91BE;
-            font-weight:bold;
-        }
-
-        .filterCheckBox{
-            display: block;
-            margin: 2% 0 0 0;
-        }
-
-        /* .filterCheckBox input{
-            margin-left: 3%;
-        } */
-
-        /* button{
-            display: block;
-            width: 70%;
-            margin: 0 auto;
-            position: relative;
-            height: 70%;
-            top: 1.6em;
-            border-radius: 5px;
-            background-color: #FFCD69;
-
-            font-family: sans-serif;
-            font-size: 0.8em;
-            color: black;
-        }
-
-        button:hover{
-            background-color: #FFAE02;
-            color: white;
-        } */
-
-        /* Customize the label (the container) */
-            .checkBoxContainer {
-              display: inline-block;
-              position: relative;
-              padding-left: 4em;
-              margin-bottom: 1%;
-              cursor: pointer;
-              /* font-size: 22px; */
-              -webkit-user-select: none;
-              -moz-user-select: none;
-              -ms-user-select: none;
-              user-select: none;
-            }
-
-            /* Hide the browser's default checkbox */
-            .checkBoxContainer input {
-              position: absolute;
-              opacity: 0;
-              cursor: pointer;
-              height: 0;
-              width: 0;
-            }
-
-            /* Create a custom checkbox */
-            .checkmark {
-              position: absolute;
-              top: 0;
-              left: 2.5em;
-              height: 18px;
-              width: 18px;
-              background-color: #eee;
-              border-radius: 5px;
-            }
-
-            /* On mouse-over, add a grey background color */
-            .checkBoxContainer:hover input ~ .checkmark {
-              background-color: #ccc;
-            }
-
-            /* When the checkbox is checked, add a blue background */
-            /* .checkBoxContainer input:checked ~ .checkmark {
-              background-color: #2196F3;
-            } */
-            .checkBoxContainer input:checked ~ .accommodation_marker {
-              background-color: #4B92C0;
-            }
-            .checkBoxContainer input:checked ~ .event_marker {
-              background-color: #F99D4C;
-            }
-
-            /* Create the checkmark/indicator (hidden when not checked) */
-            .checkmark:after {
-              content: "";
-              position: absolute;
-              display: none;
-            }
-
-            /* Show the checkmark when checked */
-            .checkBoxContainer input:checked ~ .checkmark:after {
-              display: block;
-            }
-
-            /* Style the checkmark/indicator */
-            .checkBoxContainer .checkmark:after {
-              left: 6px;
-              top: 2px;
-              width: 5px;
-              height: 10px;
-              border: solid white;
-              border-width: 0 2px 2px 0;
-              -webkit-transform: rotate(45deg);
-              -ms-transform: rotate(45deg);
-              transform: rotate(45deg);
-            }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 
 
@@ -230,7 +53,9 @@ http://localhost:8000/
             <label for="amount">Time range for Accommodations:</label>
             <input class="sliderValue" type="text" id="amount" >
         </p>
-        <div id="slider-range"></div>
+        <!--div id="slider-range"></div-->
+        <!-- Create a div where the circle will take place -->
+        <svg width=400 height=400 id="slider-range"></svg>
     </div>
 
     <!-- opacity slider -->
@@ -263,80 +88,77 @@ http://localhost:8000/
     <h1>African-American UofM Student Residences<h1>
     <h3>1853-1973 (approx)</h3>
 
-
-
     <div id="map"></div>
 
     <!-- Manipulate the map -->
     <script type="text/javascript">
 
-        //Markers
-        //Method 1
-        // var myIcon = L.icon({
-        //     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-        //     iconSize: [32, 50],
-        //     iconAnchor: [16, 37],
-        //     popupAnchor: [0, -28]
-        //     });
-
-
         //Method 2
-        const markColors = {'residence': '#4E91BE', 'event': '#F99E4C'}
+        const markColors = {
+            'residence': '#4E91BE', 
+            'event': '#F99E4C'
+        };
 
         var customizedIcon;
-
+        /*
+            Customize Marker
+        */
         function customizeMarker(color){
             const myCustomColour = color
 
             const markerNarrativeHtmlStyles = `
-                                          background-color: ${myCustomColour};
-                                          width: 1.2rem;
-                                          height: 1.2rem;
-                                          display: block;
-                                          left: -1.2rem;
-                                          top: -1.2rem;
-                                          position: relative;
-                                          border-radius: 3rem 3rem 0;
-                                          transform: rotate(45deg);
-                                          border: 0.5px solid #FFFFFF
-                                      `
+                background-color: ${myCustomColour};
+                width: 1.2rem;
+                height: 1.2rem;
+                display: block;
+                left: -1.2rem;
+                top: -1.2rem;
+                position: relative;
+                border-radius: 3rem 3rem 0;
+                transform: rotate(45deg);
+                border: 0.5px solid #FFFFFF
+            `
 
             var icon = L.divIcon({
-                                      className: "my-custom-pin",
-                                      iconAnchor: [0, 24],
-                                      labelAnchor: [-6, 0],
-                                      popupAnchor: [0, -36],
-                                      html: `<span style="${markerNarrativeHtmlStyles}" />`
-                                    })
+                className: "my-custom-pin",
+                iconAnchor: [0, 24],
+                labelAnchor: [-6, 0],
+                popupAnchor: [0, -36],
+                html: `<span style="${markerNarrativeHtmlStyles}" />`
+            })
 
             return icon;
         }
 
 
 
-        //Clusters: 1 for residence, 2 for events
+        /*
+            Marker Clusters
+            1 for residence
+            2 for events
+        */
         function initialMarkerClusters(type){
 
             var uniqueClass;
 
             var groupToReturn = new L.markerClusterGroup({
-                                    spiderfyOnMaxZoom: true,
-                                    showCoverageOnHover: true,
-                                    zoomToBoundsOnClick: true,
-                                    // maxClusterRadius: 120,
-                                    singleMarkerMode: false,
-                                    iconCreateFunction: function(cluster){
-                                        count = 0;
-                                        cluster.getAllChildMarkers().forEach(function(child){
-                                            count = (type == 1) ? (count + parseInt(child.feature.properties.Count)) : (count + 1);
-                                        });
-                                        return L.divIcon({
-                                            className:`marker-cluster ${uniqueClass}`,
-                                            iconSize: new L.Point(40,40),
-                                            html: `<div><span >` + count + '</span></div>'
-                                        });
-                                    }
-                                })
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: true,
+                zoomToBoundsOnClick: true,
+                // maxClusterRadius: 120,
+                singleMarkerMode: false,
+                iconCreateFunction: function(cluster){
+                    count = 0;
+                    cluster.getAllChildMarkers().forEach(function(child){
+                        count = (type == 1) ? (count + parseInt(child.feature.properties.Count)) : (count + 1);
+                    });
+                    return L.divIcon({
+                        className:`marker-cluster ${uniqueClass}`,
+                        iconSize: new L.Point(40,40),
+                        html: `<div><span >` + count + '</span></div>'
+                    });
+                }
+            })
 
             switch (type) {
                 case 1:
@@ -351,75 +173,74 @@ http://localhost:8000/
             return groupToReturn;
         }
 
-
-
-
+        /*
+            Renders Markers to map
+            - Takes in 
+            2 for events
+        */
         function renderPins(accommodation_markers, geoJson){
             customizedIcon = customizeMarker(markColors['residence']);
 
-            var geojson = L.geoJson(
-                                geoJson,
-                                {
-                                    onEachFeature: function(feature,layer){
-                                        layer.bindPopup("<b>Address:  </b>" + feature.properties.address + "<br>" + "<b>No. of Students:  </b>" + feature.properties.Count);
-                                    },
-                                    pointToLayer: function (feature, latlng) {
-                                        return L.marker(latlng, {icon: customizedIcon});
-                                    }
-                            });
+            var geojson = L.geoJson(geoJson,
+            {
+                onEachFeature: function(feature,layer){
+                    layer.bindPopup("<b>Address:  </b>" + feature.properties.address + "<br>" + "<b>No. of Students:  </b>" + feature.properties.Count);
+                },
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, {icon: customizedIcon});
+                }
+            });
 
             accommodation_markers.clearLayers();
             accommodation_markers.addLayer(geojson);
             map.addLayer(accommodation_markers);
         }
 
-
-
         function renderNarrativePins(event_markers, geoJsonURL){
             customizedIcon = customizeMarker(markColors['event']);
 
             $.getJSON(geoJsonURL, function(data){
                 var geojson = L.geoJson(data, {
-                                                onEachFeature: function(feature,layer){
-                                                    let val_date = feature.properties.Date;
-                                                    let val_text = feature.properties.Text;
-                                                    let val_keywords = feature.properties.Keywords;
-                                                    let val_img = feature.properties['Local_Image'];
+                        onEachFeature: function(feature,layer){
+                            let val_date = feature.properties.Date;
+                            let val_text = feature.properties.Text;
+                            let val_keywords = feature.properties.Keywords;
+                            let val_img = feature.properties['Local_Image'];
 
-                                                    if (val_date != ""){
-                                                        val_date = "<b>Date: </b>" + val_date + "<br>";
-                                                    }
+                            if (val_date != ""){
+                                val_date = "<b>Date: </b>" + val_date + "<br>";
+                            }
 
-                                                    if (val_text != ""){
-                                                        val_text = "<b>Text: </b>" + val_text  + "<br>";
-                                                    }
+                            if (val_text != ""){
+                                val_text = "<b>Text: </b>" + val_text  + "<br>";
+                            }
 
-                                                    if (val_keywords != ""){
-                                                        val_keywords = "<b>Keywords: </b>" + val_keywords + "<br>";
-                                                    }
+                            if (val_keywords != ""){
+                                val_keywords = "<b>Keywords: </b>" + val_keywords + "<br>";
+                            }
 
-                                                    if (val_img != ""){
-                                                        val_img = '<img src="' + val_img + '"  style="max-width:250; max-height:200" />';
-                                                    }
+                            if (val_img != ""){
+                                val_img = '<img src="' + val_img + '"  style="max-width:250; max-height:200" />';
+                            }
 
-                                                    layer.bindPopup("<b>Address:  </b>" + feature.properties.Address + "<br>" + val_date + val_text + val_keywords + val_img);
-                                                },
+                            layer.bindPopup("<b>Address:  </b>" + feature.properties.Address + "<br>" + val_date + val_text + val_keywords + val_img);
+                        },
 
-                                                pointToLayer: function (feature, latlng) {
-                                                    return L.marker(latlng, {icon: customizedIcon});
-                                                }
-                                        });
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, {icon: customizedIcon});
+                        }
+                });
                 event_markers.addLayer(geojson);
                 map.addLayer(event_markers);
             });
 
         }
 
-
+       
 
         //Slider
         $( function() {
-            // config opaque slider
+            // Config opaque slider
             $( "#slider-opaque" ).slider({
                 range: false,
                 min: 0,
@@ -434,12 +255,13 @@ http://localhost:8000/
                     a2_1916_02.setOpacity(opaque);
                 }
             });
+
             //initial display
             $( "#opacity" ).val("1");
-
-
+           
+            //Replace this with a graph
             // config time range slider
-            $( "#slider-range" ).slider({
+            /*$( "#slider-range" ).slider({
                 range: true,
                 min: 1853, //change to year 1853
                 max: 1973, //change to year 1973
@@ -457,6 +279,7 @@ http://localhost:8000/
 
                     $( "#amount" ).val( startYear + " - " + endYear );
 
+                    //Only markers that are pushed to be shown are markers with the required properties
                     for (let i = 0; i < GEOJSON["features"].length; i++){
                         if (GEOJSON["features"][i]["properties"]["Date"] >= startYear && GEOJSON["features"][i]["properties"]["Date"] <= endYear) {  // will change "id" to "year"
                             newGeoJson["features"].push(GEOJSON["features"][i])
@@ -464,7 +287,9 @@ http://localhost:8000/
                     }
                     renderPins(accommodation_markers,newGeoJson);
                 }
-            });
+            }); */
+            
+            
             //initial display
             $( "#amount" ).val(
                  $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 )
@@ -503,9 +328,9 @@ http://localhost:8000/
         var accommodation_markers = initialMarkerClusters(1);
         var event_markers = initialMarkerClusters(2);
         var markers = {
-                        "accommodation_markers": accommodation_markers,
-                        "event_markers": event_markers
-                    }
+            "accommodation_markers": accommodation_markers,
+            "event_markers": event_markers
+        }
 
         //GET THE INITIAL PINS
         renderPins(accommodation_markers, GEOJSON);
@@ -515,7 +340,6 @@ http://localhost:8000/
 
 
         d3.selectAll("input[type=checkbox]").on("change", function(d) {
-
             var showPins = this.checked;
             var theMarker = markers[this.value];
 
@@ -526,44 +350,20 @@ http://localhost:8000/
             }
         });
 
+        // Draw a circle
+        var myCircle = d3.select("#slider-range")
+            .append("svg")
+            .append("circle")
+                .attr("cx", 200)
+                .attr("cy", 200)
+                .attr("r", 40)
+                .attr("fill", "#69a3b2")
 
-        // History notes
-            // add a popup for each point
-            // markers.bindPopup("I am a popup");
+        d3.select("#slider-range")
+            .call( d3.brush()                     // Add the brush feature using the d3.brush function
+                .extent( [ [0,0], [400,400] ] )   // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+            )
 
-            // CVL code 03.20.2018
-
-            // source code for looping function to add specialized popup content - http://plnkr.co/edit/AuakADHXboI18S81ADjG?p=preview
-
-            // popup on mouseover - https://gis.stackexchange.com/questions/31951/how-to-show-a-popup-on-mouse-over-not-on-click
-
-            // add click event to clustered icons - https://stackoverflow.com/questions/37774489/leaflet-add-click-event-to-clustered-icons
-
-            //
-            // $(document).ready(function () {
-
-            //     //bind marker click event to overylay
-            //    markers.on('click', function (d) {
-            //        // Grab marker title and make it look like an ID
-            //        // for (var key in this){
-            //        //  alert(key)
-            //        // }
-            //        var popup = L.popup()
-            //        .setContent("hi")
-            //        .setLatLng(d.latlng)
-            //         .openOn(map);
-            //        // alert(this['_popupContent']);
-            //    });
-            // });
-
-            // HISTORY / NOTES
-
-            // 03.092018 ERROR - summary of issue:
-            // tutorial doesn't assume use of ajax
-            // so requests are made asynchronously with loading cluster function
-            // solution: need some kind of way to call cluster function AFTER data has finished loading
-
-            // 03.15.2018 ERROR RESOLVED - using above jQuery function
     </script>
 
 
