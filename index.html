@@ -270,16 +270,6 @@ http://localhost:8000/
     <!-- Manipulate the map -->
     <script type="text/javascript">
 
-        //Markers
-        //Method 1
-        // var myIcon = L.icon({
-        //     iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-        //     iconSize: [32, 50],
-        //     iconAnchor: [16, 37],
-        //     popupAnchor: [0, -28]
-        //     });
-
-
         //Method 2
         const markColors = {'residence': '#4E91BE', 'event': '#F99E4C'}
 
@@ -351,9 +341,6 @@ http://localhost:8000/
             return groupToReturn;
         }
 
-
-
-
         function renderPins(accommodation_markers, geoJson){
             customizedIcon = customizeMarker(markColors['residence']);
 
@@ -372,8 +359,6 @@ http://localhost:8000/
             accommodation_markers.addLayer(geojson);
             map.addLayer(accommodation_markers);
         }
-
-
 
         function renderNarrativePins(event_markers, geoJsonURL){
             customizedIcon = customizeMarker(markColors['event']);
