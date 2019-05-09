@@ -62,7 +62,7 @@ http://localhost:8000/
         </p>
         <!--div id="slider-range"></div-->
         <!-- Create a div where the new slider will be -->
-        <svg width=400 height=400 id="slider-range"></svg>
+        <svg width=400 height=90 id="slider-range"></svg>
     </div>
 
     <!-- opacity slider -->
@@ -296,22 +296,12 @@ http://localhost:8000/
                 }
             }); */
             var geoChart  = dc.barChart("#slider-range");
-            // use static or load via d3.csv("spendData.csv", function(error, spendData) {/* do stuff */});
 
             min = 1853 //change to year 1853
             max = 1973 //change to year 1973
-            /*var spendData = [
-                {Name: 'Mr A', Spent: '$40', Year: 2011},
-                {Name: 'Mr B', Spent: '$10', Year: 2011},
-                {Name: 'Mr C', Spent: '$40', Year: 2011},
-                {Name: 'Mr A', Spent: '$70', Year: 2012},
-                {Name: 'Mr B', Spent: '$20', Year: 2012},
-                {Name: 'Mr B', Spent: '$50', Year: 2013},
-                {Name: 'Mr C', Spent: '$30', Year: 2013}
-            ];*/
+
             var geoData = GEOJSON["features"]
-            //console.log(spendData)
-            // normalize/parse data
+
             geoData.forEach(function(d) {
                 //d.Spent = d.Spent.match(/\d+/);
                 d.properties.Count = +d.properties.Count
@@ -327,9 +317,10 @@ http://localhost:8000/
                 countHist    = countDim.group().reduceCount();
 
             geoChart
-                .dimension(countPerYear)
-                .group(countHist)
-                .x(d3.scaleLinear().domain([0,20]))
+                .height(100)
+                .dimension(yearDim)
+                .group(countPerYear)
+                .x(d3.scaleLinear().domain([min,max]))
                 .elasticY(true)
                 .controlsUseVisibility(true);
 
