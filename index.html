@@ -41,6 +41,13 @@ http://localhost:8000/
     <script src="https://d3js.org/d3-color.v1.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
 
+    <!-- New  Crossfilter libraries-->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dc@3/dc.css" />
+    <script src="https://unpkg.com/d3@5/dist/d3.js"></script>
+    <script src="https://unpkg.com/crossfilter2@1.4/crossfilter.js"></script>
+    <script src="https://unpkg.com/dc@3/dc.js"></script>
+    <script src="https://rawgit.com/crossfilter/reductio/master/reductio.js"></script>
+
     <link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 
@@ -54,7 +61,7 @@ http://localhost:8000/
             <input class="sliderValue" type="text" id="amount" >
         </p>
         <!--div id="slider-range"></div-->
-        <!-- Create a div where the circle will take place -->
+        <!-- Create a div where the new slider will be -->
         <svg width=400 height=400 id="slider-range"></svg>
     </div>
 
@@ -259,7 +266,7 @@ http://localhost:8000/
             //initial display
             $( "#opacity" ).val("1");
            
-            //Replace this with a graph
+            //Replace this with a cross filter graph
             // config time range slider
             /*$( "#slider-range" ).slider({
                 range: true,
@@ -288,7 +295,48 @@ http://localhost:8000/
                     renderPins(accommodation_markers,newGeoJson);
                 }
             }); */
-            
+            var geoChart  = dc.barChart("#slider-range");
+            // use static or load via d3.csv("spendData.csv", function(error, spendData) {/* do stuff */});
+
+            min = 1853 //change to year 1853
+            max = 1973 //change to year 1973
+            /*var spendData = [
+                {Name: 'Mr A', Spent: '$40', Year: 2011},
+                {Name: 'Mr B', Spent: '$10', Year: 2011},
+                {Name: 'Mr C', Spent: '$40', Year: 2011},
+                {Name: 'Mr A', Spent: '$70', Year: 2012},
+                {Name: 'Mr B', Spent: '$20', Year: 2012},
+                {Name: 'Mr B', Spent: '$50', Year: 2013},
+                {Name: 'Mr C', Spent: '$30', Year: 2013}
+            ];*/
+            var geoData = GEOJSON["features"]
+            //console.log(spendData)
+            // normalize/parse data
+            geoData.forEach(function(d) {
+                //d.Spent = d.Spent.match(/\d+/);
+                d.properties.Count = +d.properties.Count
+                //console.log(d.properties.Count)
+            });
+            // set crossfilter
+            var ndx = crossfilter(geoData),
+                yearDim  = ndx.dimension(function(d) {return +d.properties.Date;}),
+                countDim = ndx.dimension(function(d) {return d.properties.Count;}),
+                nameDim  = ndx.dimension(function(d) {return d.properties.address;}),
+                countPerYear = yearDim.group().reduceSum(function(d) {return +d.properties.Count;}),
+                countPerName = nameDim.group().reduceSum(function(d) {return +d.properties.Count;}),
+                countHist    = countDim.group().reduceCount();
+
+            geoChart
+                .dimension(countPerYear)
+                .group(countHist)
+                .x(d3.scaleLinear().domain([0,20]))
+                .elasticY(true)
+                .controlsUseVisibility(true);
+
+            geoChart.xAxis().tickFormat(function(d) {return d}); // convert back to base unit
+            geoChart.yAxis().ticks(2);
+
+            dc.renderAll();
             
             //initial display
             $( "#amount" ).val(
@@ -350,19 +398,8 @@ http://localhost:8000/
             }
         });
 
-        // Draw a circle
-        var myCircle = d3.select("#slider-range")
-            .append("svg")
-            .append("circle")
-                .attr("cx", 200)
-                .attr("cy", 200)
-                .attr("r", 40)
-                .attr("fill", "#69a3b2")
-
-        d3.select("#slider-range")
-            .call( d3.brush()                     // Add the brush feature using the d3.brush function
-                .extent( [ [0,0], [400,400] ] )   // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-            )
+    
+        
 
     </script>
 
