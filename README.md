@@ -23,3 +23,11 @@ The data was queried into a Pandas to allow for easier data manipulation. CSVs o
     ├── resources           # Resources for reference   
     ├── index.html          # Main fil
     └── README.md
+
+## Build and run
+
+### Server 
+Run the following in the main/root folder of this project to start your own server
+```
+python -m SimpleHTTPServer
+```
