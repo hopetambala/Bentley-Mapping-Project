@@ -278,10 +278,10 @@ http://localhost:8000/
 
             renderNarrativePins(event_markers, "data/final_narrative_data.geojson") 
 
-
+            //CROSS FILTER CODE
             var geoChart  = dc.barChart("#slider-range");
-            min = 1853 //change to year 1853
-            max = 1973 //change to year 1973
+            min = 1853 
+            max = 1973 
 
             var geoData = GEOJSON["features"]
 
@@ -293,11 +293,12 @@ http://localhost:8000/
             // set crossfilter
             var ndx = crossfilter(geoData),
                 yearDim  = ndx.dimension(function(d) {return +d.properties.Date;}),
-                countDim = ndx.dimension(function(d) {return d.properties.Count;}),
-                nameDim  = ndx.dimension(function(d) {return d.properties.address;}),
+                //countDim = ndx.dimension(function(d) {return d.properties.Count;}),
+                //nameDim  = ndx.dimension(function(d) {return d.properties.address;}),
                 countPerYear = yearDim.group().reduceSum(function(d) {return +d.properties.Count;}),
-                countPerName = nameDim.group().reduceSum(function(d) {return +d.properties.Count;}),
-                countHist    = countDim.group().reduceCount();
+                //countPerName = nameDim.group().reduceSum(function(d) {return +d.properties.Count;}),
+                //countHist    = countDim.group().reduceCount()
+                ;
 
             geoChart
                 .height(100)
@@ -360,19 +361,7 @@ http://localhost:8000/
         // zoom and center in Ann Arbor
         map.setView([42.2718, -83.7436], 14);
 
-        // cluster points on the map
-        /*var accommodation_markers = initialMarkerClusters(1);
-        var event_markers = initialMarkerClusters(2);
-        var markers = {
-            "accommodation_markers": accommodation_markers,
-            "event_markers": event_markers
-        }
-
-        //GET THE INITIAL PINS
-        renderPins(accommodation_markers, GEOJSON);
-
-        renderNarrativePins(event_markers, "data/final_narrative_data.geojson");
-
+        
 
 
         d3.selectAll("input[type=checkbox]").on("change", function(d) {
@@ -385,9 +374,6 @@ http://localhost:8000/
                 map.removeLayer(theMarker);
             }
         });
-        */
-    
-        
 
     </script>
 
