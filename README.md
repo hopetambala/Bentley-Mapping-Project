@@ -76,7 +76,7 @@ function customizeMarker(color){
 ```
 
 #### Marker Clustering
-For (marker clustering)[https://github.com/Leaflet/Leaflet.markercluster], we create a function to separate Residence marker clusters and Events marker clusters. Case 1 is for Residence Markers and Case 2 is for Event Markers.
+For [marker clustering](https://github.com/Leaflet/Leaflet.markercluster), we create a function to separate Residence marker clusters and Events marker clusters. Case 1 is for Residence Markers and Case 2 is for Event Markers.
 ```
 function initialMarkerClusters(type){
     var uniqueClass;
@@ -150,7 +150,7 @@ function renderNarrativePins(event_markers, geoJsonURL){
 
 #### Crossfilter Data
 In order to manage the markers on the map, we created a crossfilter slider that also displays the number of students per year.
-Here we used (dc.js)[http://dc-js.github.io/dc.js/] specifically its (filtering)[http://dc-js.github.io/dc.js/examples/filtering.html] example.
+Here we used [dc.js](http://dc-js.github.io/dc.js/) specifically its [filtering](http://dc-js.github.io/dc.js/examples/filtering.html) example.
 
 Here we create a barchart and attach it to the id `slider-range`.
 ```
