@@ -266,37 +266,20 @@ http://localhost:8000/
             //initial display
             $( "#opacity" ).val("1");
            
-            //Replace this with a cross filter graph
-            // config time range slider
-            /*$( "#slider-range" ).slider({
-                range: true,
-                min: 1853, //change to year 1853
-                max: 1973, //change to year 1973
-                values: [ 1853, 1973 ], //change to year 1853 - 1973
+            var accommodation_markers = initialMarkerClusters(1);
+            var event_markers = initialMarkerClusters(2);
+           /* var markers = {
+                "accommodation_markers": accommodation_markers,
+                "event_markers": event_markers
+            }*/
 
-                // Every time slider is slided, the map should be refreshed
-                slide: function( event, ui ) {
+            //GET THE INITIAL PINS
+            renderPins(accommodation_markers, GEOJSON);
 
-                    var newGeoJson = {
-                        "type" : "Feature Collection",
-                        "features": []
-                    };
-                    let startYear = ui.values[ 0 ];
-                    let endYear = ui.values[ 1 ];
+            renderNarrativePins(event_markers, "data/final_narrative_data.geojson") 
 
-                    $( "#amount" ).val( startYear + " - " + endYear );
 
-                    //Only markers that are pushed to be shown are markers with the required properties
-                    for (let i = 0; i < GEOJSON["features"].length; i++){
-                        if (GEOJSON["features"][i]["properties"]["Date"] >= startYear && GEOJSON["features"][i]["properties"]["Date"] <= endYear) {  // will change "id" to "year"
-                            newGeoJson["features"].push(GEOJSON["features"][i])
-                        }
-                    }
-                    renderPins(accommodation_markers,newGeoJson);
-                }
-            }); */
             var geoChart  = dc.barChart("#slider-range");
-
             min = 1853 //change to year 1853
             max = 1973 //change to year 1973
 
@@ -322,17 +305,31 @@ http://localhost:8000/
                 .group(countPerYear)
                 .x(d3.scaleLinear().domain([min,max]))
                 .elasticY(true)
-                .controlsUseVisibility(true);
+                .controlsUseVisibility(true)
+                .on('renderlet',function(){
+                    ///Logic for re-rendering markers for map
+                    var newGeoJson = {
+                        "type" : "Feature Collection",
+                        "features": []
+                    };
+
+                    //Check if that data is updating
+                    console.log(yearDim.top(Infinity))
+                    console.log(GEOJSON["features"])
+
+                    //Add new pins based on data created from the crossfilter
+                    for(let i=0; i < yearDim.top(Infinity).length;i++){
+                        newGeoJson["features"].push(yearDim.top(Infinity)[i])
+                    }
+                    renderPins(accommodation_markers,newGeoJson);
+                });
 
             geoChart.xAxis().tickFormat(function(d) {return d}); // convert back to base unit
             geoChart.yAxis().ticks(2);
 
             dc.renderAll();
             
-            //initial display
-            $( "#amount" ).val(
-                 $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 )
-            );
+          
         } );
 
 
@@ -364,7 +361,7 @@ http://localhost:8000/
         map.setView([42.2718, -83.7436], 14);
 
         // cluster points on the map
-        var accommodation_markers = initialMarkerClusters(1);
+        /*var accommodation_markers = initialMarkerClusters(1);
         var event_markers = initialMarkerClusters(2);
         var markers = {
             "accommodation_markers": accommodation_markers,
@@ -388,7 +385,7 @@ http://localhost:8000/
                 map.removeLayer(theMarker);
             }
         });
-
+        */
     
         
 
