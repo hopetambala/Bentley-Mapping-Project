@@ -184,7 +184,24 @@ geoChart
     .group(countPerYear)
     .x(d3.scaleLinear().domain([min,max]))
     .elasticY(true)
-    .controlsUseVisibility(true);
+    .controlsUseVisibility(true)
+    .on('renderlet',function(){
+        ///Logic for re-rendering markers for map
+        var newGeoJson = {
+            "type" : "Feature Collection",
+            "features": []
+        };
+
+        //Check if that data is updating
+        console.log(yearDim.top(Infinity))
+        console.log(GEOJSON["features"])
+
+        //Add new pins based on data created from the crossfilter
+        for(let i=0; i < yearDim.top(Infinity).length;i++){
+            newGeoJson["features"].push(yearDim.top(Infinity)[i])
+        }
+        renderPins(accommodation_markers,newGeoJson);
+    });
 
 geoChart.xAxis().tickFormat(function(d) {return d}); // convert back to base unit
 geoChart.yAxis().ticks(2);
