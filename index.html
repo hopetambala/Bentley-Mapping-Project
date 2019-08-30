@@ -295,10 +295,7 @@ http://localhost:8000/
                 yearDim  = ndx.dimension(function(d) {return +d.properties.Date;}),
                 //countDim = ndx.dimension(function(d) {return d.properties.Count;}),
                 //nameDim  = ndx.dimension(function(d) {return d.properties.address;}),
-                countPerYear = yearDim.group().reduceSum(function(d) {return +d.properties.Count;}),
-                //countPerName = nameDim.group().reduceSum(function(d) {return +d.properties.Count;}),
-                //countHist    = countDim.group().reduceCount()
-                ;
+                countPerYear = yearDim.group().reduceSum(function(d) {return +d.properties.Count;});
 
             geoChart
                 .height(100)
