@@ -1,28 +1,31 @@
 /* paste CSS below this line */
 #map {
-    width:100%;
+    width:98%;
     height:100%;
+    /* display: inline-block; */
+    margin: 0 auto;
 }
 
-h1, h3{
-  font-family: "Arial", "Verdana"
+h1 {
+  font-family: Arial, Verdana;
+  text-align: center;
+  margin: 10px;
+  font-size: 40px;
+  font-weight: bold;
 }
-
-/* .markerdiv {
-  background-color: rgba(237, 248, 177, 0.6);
+h2 {
+  font-family: Arial, Verdana;
+  text-align: center;
+  margin: 10px;
+  font-size: 30px;
+  font-weight: bolder;
 }
-
-.marker-cluster-small div {
-  background-color: rgba(237, 248, 177, 0.6);
+h3 {
+  font-family: Arial, Verdana;
+  text-align: center;
+  margin: 10px;
+  font-size: 20px;
 }
-
-.marker-cluster-medium {
-  background-color: rgba(127, 205, 187, 0.6);
-}
-
-.marker-cluster-medium div {
-  background-color: rgba(127, 205, 187, 0.6);
-} */
 
 .marker-cluster-large {
   background-color: rgba(44, 127, 184, 0.6);
@@ -42,8 +45,6 @@ h1, h3{
   background-color: rgba(254, 143, 27, 0.6);
 }
 
-
-
 .sliderDiv{
   display:inline-block;
   width: 66%;
@@ -53,13 +54,9 @@ h1, h3{
   /* margin-top: 25px; */
 }
 
-.sliderDiv.narrow{
-  width: 30%;
-  padding-left: 0;
-}
-
-#slider-opaque, #slider-range{
-  width: 90%;
+.sliderDiv-narrow {
+  width: 20%;
+  padding-left: 1110px;
 }
 
 .sliderValue{
@@ -70,32 +67,8 @@ h1, h3{
 
 .filterCheckBox{
   display: block;
-  margin: 2% 0 0 0;
+  /* margin: 2% 0 0 0; */
 }
-
-/* .filterCheckBox input{
-  margin-left: 3%;
-} */
-
-/* button{
-  display: block;
-  width: 70%;
-  margin: 0 auto;
-  position: relative;
-  height: 70%;
-  top: 1.6em;
-  border-radius: 5px;
-  background-color: #FFCD69;
-
-  font-family: sans-serif;
-  font-size: 0.8em;
-  color: black;
-}
-
-button:hover{
-  background-color: #FFAE02;
-  color: white;
-} */
 
 /* Customize the label (the container) */
   .checkBoxContainer {
@@ -123,7 +96,7 @@ button:hover{
   /* Create a custom checkbox */
   .checkmark {
     position: absolute;
-    top: 0;
+    /* top: 0; */
     left: 2.5em;
     height: 18px;
     width: 18px;

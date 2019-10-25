@@ -21,13 +21,14 @@ http://localhost:8000/
     <link rel="stylesheet" type="text/css" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
     <script type='text/javascript' src='http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js'></script>
     <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
 
     <!-- Pass the geojson data into a viarable named GEOJSON -->
-    <script type="text/javascript" src="data/vlookup.js"></script>
+    <script type="text/javascript" src="data/newdata.js"></script>
 
     <!--former script links pre 03.09.2018 -->
     <!-- <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> -->
@@ -48,61 +49,59 @@ http://localhost:8000/
     <script src="https://unpkg.com/dc@3/dc.js"></script>
     <script src="https://rawgit.com/crossfilter/reductio/master/reductio.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="./style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
 
 <body>
-    <!-- time range slider -->
-    <div class="sliderDiv" >
-        <p>
-            <label for="amount">Time range for Accommodations:</label>
-            <input class="sliderValue" type="text" id="amount" >
-        </p>
-        <!--div id="slider-range"></div-->
-        <!-- Create a div where the new slider will be -->
-        <svg width=400 height=90 id="slider-range"></svg>
-    </div>
-
-    <!-- opacity slider -->
-    <div class="sliderDiv narrow" >
-        <p>
-            <label for="opacity">Map opacity:</label>
-            <input class="sliderValue" type="text" id="opacity" >
-        </p>
-        <div id="slider-opaque"></div>
-    </div>
-
-    <!-- checkboxes -->
-    <span class="filterCheckBox">
-        <label class="checkBoxContainer">Accommodations
-          <input type="checkbox" name="Accommodations" value="accommodation_markers" checked=true>
-          <span class="checkmark accommodation_marker"></span>
-        </label>
-        <label class="checkBoxContainer">Events
-          <input type="checkbox" name="Events"  value="event_markers" checked=true>
-          <span class="checkmark event_marker"></span>
-        </label>
-        <!-- <input type="checkbox" name="Accommodations" value="accommodation_markers" checked=true> Accommodations
-        <input type="checkbox" name="Events"  value="event_markers" checked=true> Events -->
-    </span>
-
-
-
-    <hr>
-
     <h1>African-American UofM Student Residences<h1>
-    <h3>1853-1973 (approx)</h3>
+    <h2>1853-1973 (approx)</h3>
 
+    <div class="container" style="margin-top: 0%; margin-bottom: 0%;">
+        <section class = "columns is-gapless is-vcentered is-centered"> <!-- time range slider -->
+            <div class="column level" style="margin: 0%;">
+                <h3 for="amount">Time range for Accommodations</h3>
+                <input class="sliderValue" type="text" id="amount">
+                <!-- Create a div where the new slider will be -->
+                <svg width=500 height=90 id="slider-range"></svg>
+            </div>
+
+            <!-- opacity slider -->
+            <div class="column level" >
+                <div>
+                    <h3 for="opacity">Map opacity</h3>
+                    <input class="sliderValue" type="text" id="opacity" >
+                    <div id="slider-opaque" style="margin-left: 10%; margin-right: 10%;"></div>
+                </div>
+            </div>
+        </section>
+        <!-- checkboxes --> 
+    </div>
+    <hr>
+    <div class="container">
+        <span class="filterCheckBox">
+            <h3 class="checkBoxContainer">Accommodations
+                <input type="checkbox" name="Accommodations" value="accommodation_markers" checked=true>
+                <span class="checkmark accommodation_marker"></span>
+            </h3>
+            <h3 class="checkBoxContainer">Events
+                <input type="checkbox" name="Events"  value="event_markers" checked=true>
+                <span class="checkmark event_marker"></span>
+            </h3>
+        </span>
+        
+    </div>
     <div id="map"></div>
+
+    
 
     <!-- Manipulate the map -->
     <script type="text/javascript">
 
         //Method 2
         const markColors = {
-            'residence': '#4E91BE', 
+            'residence': '#4E91BE',
             'event': '#F99E4C'
         };
 
@@ -182,7 +181,7 @@ http://localhost:8000/
 
         /*
             Renders Markers to map
-            - Takes in 
+            - Takes in
             2 for events
         */
         function renderPins(accommodation_markers, geoJson){
@@ -200,7 +199,20 @@ http://localhost:8000/
 
             accommodation_markers.clearLayers();
             accommodation_markers.addLayer(geojson);
+
             map.addLayer(accommodation_markers);
+
+            d3.select("input[value=accommodation_markers]").on("change", function(d) {
+                var showPins = this.checked;
+
+                if(showPins){
+                    map.addLayer(accommodation_markers);
+                } else{
+                    map.removeLayer(accommodation_markers);
+                }
+            });
+
+            return accommodation_markers;
         }
 
         function renderNarrativePins(event_markers, geoJsonURL){
@@ -239,11 +251,23 @@ http://localhost:8000/
                 });
                 event_markers.addLayer(geojson);
                 map.addLayer(event_markers);
+
+                d3.select("input[value=event_markers]").on("change", function(d) {
+                    var showPins = this.checked;
+
+                    if(showPins){
+                        map.addLayer(event_markers);
+                    } else{
+                        map.removeLayer(event_markers);
+                    }
+                });
+
+                return event_markers;
             });
 
         }
 
-       
+
 
         //Slider
         $( function() {
@@ -265,7 +289,7 @@ http://localhost:8000/
 
             //initial display
             $( "#opacity" ).val("1");
-           
+
             var accommodation_markers = initialMarkerClusters(1);
             var event_markers = initialMarkerClusters(2);
            /* var markers = {
@@ -276,12 +300,12 @@ http://localhost:8000/
             //GET THE INITIAL PINS
             renderPins(accommodation_markers, GEOJSON);
 
-            renderNarrativePins(event_markers, "data/final_narrative_data.geojson") 
+            event_markers = renderNarrativePins(event_markers, "data/final_narrative_data.geojson")
 
             //CROSS FILTER CODE
             var geoChart  = dc.barChart("#slider-range");
-            min = 1853 
-            max = 1973 
+            min = 1853
+            max = 1973
 
             var geoData = GEOJSON["features"]
 
@@ -296,6 +320,9 @@ http://localhost:8000/
                 //countDim = ndx.dimension(function(d) {return d.properties.Count;}),
                 //nameDim  = ndx.dimension(function(d) {return d.properties.address;}),
                 countPerYear = yearDim.group().reduceSum(function(d) {return +d.properties.Count;});
+                //countPerName = nameDim.group().reduceSum(function(d) {return +d.properties.Count;}),
+                //countHist    = countDim.group().reduceCount()
+
 
             geoChart
                 .height(100)
@@ -319,15 +346,15 @@ http://localhost:8000/
                     for(let i=0; i < yearDim.top(Infinity).length;i++){
                         newGeoJson["features"].push(yearDim.top(Infinity)[i])
                     }
-                    renderPins(accommodation_markers,newGeoJson);
+                    accommodation_markers = renderPins(accommodation_markers,newGeoJson);
                 });
 
             geoChart.xAxis().tickFormat(function(d) {return d}); // convert back to base unit
             geoChart.yAxis().ticks(2);
 
             dc.renderAll();
-            
-          
+
+
         } );
 
 
@@ -358,20 +385,7 @@ http://localhost:8000/
         // zoom and center in Ann Arbor
         map.setView([42.2718, -83.7436], 14);
 
-        
-
-
-        d3.selectAll("input[type=checkbox]").on("change", function(d) {
-            var showPins = this.checked;
-            var theMarker = markers[this.value];
-
-            if(showPins){
-                map.addLayer(theMarker);
-            } else{
-                map.removeLayer(theMarker);
-            }
-        });
-
+        //});
     </script>
 
 
